@@ -17,7 +17,7 @@ class TransactionPrinter {
         printer.printTransactions("DATE | AMOUNT | BALANCE")
     }
 
-    fun formattedDate(date: Date?) = SimpleDateFormat("dd/MM/yy").format(date)
+    fun formattedDate(date: Date?): String? = if (date != null) SimpleDateFormat("dd/MM/yy").format(date) else null
 }
 interface Printer {
     fun  printTransactions(message: String)
