@@ -1,17 +1,24 @@
 package memoizrlabs.com.tdd_playground
 
+import rx.Observable
+
 class AccountPresenter(
-        private val view: AccountView,
         private val transactionRepository: TransactionRepository,
-        private val transactionPrinter: TransactionPrinter){
+        private val transactionPrinter: TransactionPrinter) {
 
-    fun printStatement() {
-        transactionPrinter.printTransactions(transactionRepository.getLastTransaction(), view)
+    fun onViewAttached(view: AccountView) {
+        view.deposits().subscribe { amount ->
+            transactionRepository.deposit(amount)
+        }
+
+        view.printStatementRequest().subscribe {
+            transactionPrinter.printTransactions(transactionRepository.getAllTransactions(), HeaderPrinter(view))
+        }
+
     }
 
-    fun deposit(amount: Int) {
-        transactionRepository.deposit(amount)
+    interface AccountView : Printer {
+        fun deposits(): Observable<Int>
+        fun printStatementRequest(): Observable<Unit>
     }
-
-    interface AccountView: Printer
 }

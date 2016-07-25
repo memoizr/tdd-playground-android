@@ -1,10 +1,11 @@
 package memoizrlabs.com.tdd_playground
 
 class TransactionRepository(private val calendar: Calendar){
-    var transaction: Transaction? = null
+    private var transactions = mutableListOf<Transaction>()
+
     fun deposit(amount: Int) {
-        transaction = Transaction(calendar.getDate(), amount)
+        transactions.add(Transaction(calendar.getDate(), amount))
     }
 
-    fun getLastTransaction(): Transaction? = transaction
+    fun getAllTransactions(): List<Transaction> = transactions
 }
